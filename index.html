@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Alcoholics Anonymous Map- NYC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <ul class="select-container">
+        <li>
+            <div class="custom-select" style="width:200px;">
+                <select>
+                    <option value="">Select Day</option>
+                    <option value="anyday">Any Day</option>
+                    <option value="monday">Monday</option>
+                    <option value="tuesday">Tuesday</option>
+                    <option value="wednesday">Wednesday</option>
+                    <option value="thursday">Thursday</option>
+                    <option value="friday">Friday</option>
+                    <option value="saturday">Saturday</option>
+                    <option value="sunday">Sunday</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="custom-select" style="width:200px;">
+                <select>
+                    <option value="">Select Time</option>
+                    <option value="anytime">Any Time</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="morining">Morning</option>
+                    <option value="midday">Midday</option>
+                    <option value="evening"">Evening</option>
+            <option value=" night">Night</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="custom-select" style="width:200px;">
+                <select>
+                    <option value="">Select Type</option>
+                    <option value="anytype">Any Type</option>
+                    <option value="">Special Interest 1</option>
+                    <option value="">Special Interest 2</option>
+                    <option value="">Special Interest 3</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="round">
+                <input type="checkbox" id="checkbox" />
+                <label for="checkbox"></label>
+              </div>
+        </li>
+    </ul>
+
+    <script>
+        var x, i, j, selElmnt, a, b, c;
+        /*look for any elements with the class "custom-select":*/
+        x = document.getElementsByClassName("custom-select");
+        for (i = 0; i < x.length; i++) {
+            selElmnt = x[i].getElementsByTagName("select")[0];
+            /*for each element, create a new DIV that will act as the selected item:*/
+            a = document.createElement("DIV");
+            a.setAttribute("class", "select-selected");
+            a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+            x[i].appendChild(a);
+            /*for each element, create a new DIV that will contain the option list:*/
+            b = document.createElement("DIV");
+            b.setAttribute("class", "select-items select-hide");
+            for (j = 1; j < selElmnt.length; j++) {
+                /*for each option in the original select element,
+                create a new DIV that will act as an option item:*/
+                c = document.createElement("DIV");
+                c.innerHTML = selElmnt.options[j].innerHTML;
+                c.addEventListener("click", function (e) {
+                    /*when an item is clicked, update the original select box,
+                    and the selected item:*/
+                    var y, i, k, s, h;
+                    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                    h = this.parentNode.previousSibling;
+                    for (i = 0; i < s.length; i++) {
+                        if (s.options[i].innerHTML == this.innerHTML) {
+                            s.selectedIndex = i;
+                            h.innerHTML = this.innerHTML;
+                            y = this.parentNode.getElementsByClassName("same-as-selected");
+                            for (k = 0; k < y.length; k++) {
+                                y[k].removeAttribute("class");
+                            }
+                            this.setAttribute("class", "same-as-selected");
+                            break;
+                        }
+                    }
+                    h.click();
+                });
+                b.appendChild(c);
+            }
+            x[i].appendChild(b);
+            a.addEventListener("click", function (e) {
+                /*when the select box is clicked, close any other select boxes,
+                and open/close the current select box:*/
+                e.stopPropagation();
+                closeAllSelect(this);
+                this.nextSibling.classList.toggle("select-hide");
+                this.classList.toggle("select-arrow-active");
+            });
+        }
+
+        function closeAllSelect(elmnt) {
+            var x, y, i, arrNo = [];
+            x = document.getElementsByClassName("select-items");
+            y = document.getElementsByClassName("select-selected");
+            for (i = 0; i < y.length; i++) {
+                if (elmnt == y[i]) {
+                    arrNo.push(i)
+                } else {
+                    y[i].classList.remove("select-arrow-active");
+                }
+            }
+            for (i = 0; i < x.length; i++) {
+                if (arrNo.indexOf(i)) {
+                    x[i].classList.add("select-hide");
+                }
+            }
+        }
+        document.addEventListener("click", closeAllSelect);
+    </script>
+
+</body>
+
+</html>
